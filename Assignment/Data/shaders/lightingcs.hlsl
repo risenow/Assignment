@@ -41,7 +41,7 @@ void CSEntry(uint GI : SV_GroupIndex, uint3 DTid : SV_DispatchThreadID, uint3 Gi
 
     float3 normal = (Normals.Load(uTC))*2.0f - 1.0f;
 
-    float3 lightVec = lightPos.xyz - vPos.xyz;
+    float3 lightVec = lightDir;//lightPos.xyz - vPos.xyz;
 
-    OutColor[uTC.xy] = Albedo.Load(uTC) * dot(normal, normalize(lightVec));
+    OutColor[uTC.xy] = Albedo.Load(uTC) * dot(normal, normalize(-lightVec));
 }

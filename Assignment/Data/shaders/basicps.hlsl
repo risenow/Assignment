@@ -8,7 +8,6 @@ struct PS_OUTPUT
     float4 Color: SV_Target0;
 #ifdef GBUFFER_PASS
     float4 Normal: SV_Target1;
-    float4 Pos: SV_Target2;
 #endif
 };
 
@@ -22,7 +21,6 @@ PS_OUTPUT PSEntry(
     output.Color = diffuseMap.Sample(Sampler, tc);
 #ifdef GBUFFER_PASS
     output.Normal = (float4(mul((float3x3)view, normalize(float3(normal.x, normal.y, normal.z))), 1.0f) + 1.0f)*0.5f;
-    output.Pos = vpos;
 #endif
     return output;
 }

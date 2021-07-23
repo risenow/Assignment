@@ -49,7 +49,7 @@ public:
         m_LightingShader.Bind(device);
         
         DeferredLightingConsts consts;
-        consts.lightPos = camera.GetViewMatrix() * glm::vec4(0.0f, 1000.0f, 0.0f, 1.0f);
+        consts.lightDir = glm::vec4(glm::mat3x3(camera.GetViewMatrix()) * glm::vec3(0.0, -1.0f, 0.0f), 1.0f);//camera.GetViewMatrix() * glm::vec4(0.0f, 1000.0f, 0.0f, 1.0f);
         consts.proj = camera.GetProjectionMatrix();
         consts.unproj = glm::inverse(consts.proj);
 

@@ -7,7 +7,7 @@ DECLARE_CONSTANT_STRUCTURE DeferredLightingConsts
 {
     DECLARE_FLOAT4X4 unproj;
     DECLARE_FLOAT4X4 proj;
-    DECLARE_FLOAT4 lightPos; //in view space
+    DECLARE_FLOAT4 lightDir; //in view space
 };
 
 #endif
