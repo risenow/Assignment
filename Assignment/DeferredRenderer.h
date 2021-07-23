@@ -22,6 +22,23 @@ public:
         m_ConstantsBuffer = GraphicsConstantsBuffer<DeferredLightingConsts>(device, consts);
 
         InitGBuffer(device, backBuffer);
+
+        D3D11_SAMPLER_DESC shadowSamplerDesc;
+        shadowSamplerDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+        shadowSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+        shadowSamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+        shadowSamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+        shadowSamplerDesc.MipLODBias = 0.0f;
+        shadowSamplerDesc.MaxAnisotropy = 1;
+        shadowSamplerDesc.ComparisonFunc = D3D11_COMPARISON_LESS;
+        shadowSamplerDesc.BorderColor[0] = 0;
+        shadowSamplerDesc.BorderColor[1] = 0;
+        shadowSamplerDesc.BorderColor[2] = 0;
+        shadowSamplerDesc.BorderColor[3] = 0;
+        shadowSamplerDesc.MinLOD = 0;
+        shadowSamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+        device.GetD3D11Device()->CreateSamplerState(&shadowSamplerDesc, &m_ShadowSampler);
     }
 
     void Consume(const std::vector<SuperMeshInstance*> meshInsts)
@@ -33,7 +50,7 @@ public:
 
     }
 
-    void Render(GraphicsDevice& device, Camera& camera)
+    void Render(GraphicsDevice& device, Camera& camera, const Texture2D& shadowMap)
     {
         ClearRenderTarget(device, m_ColorSurface);
         ClearRenderTarget(device, m_NormalsSurface);
@@ -42,14 +59,14 @@ public:
         BindRenderTargetsDepthTarget(device, { m_ColorSurface, m_NormalsSurface }, m_DepthSurface);
 
         for (SuperMeshInstance* mesh : m_Meshes)
-            mesh->Render(device, camera, BasicPixelShaderStorage::GBUFFER);
+            mesh->Render(device, camera, false, BasicPixelShaderStorage::GBUFFER);
 
         UnbindRenderTargetsDepthTarget(device, 2);
 
         m_LightingShader.Bind(device);
         
         DeferredLightingConsts consts;
-        consts.lightDir = glm::vec4(glm::mat3x3(camera.GetViewMatrix()) * glm::vec3(0.0, -1.0f, 0.0f), 1.0f);//camera.GetViewMatrix() * glm::vec4(0.0f, 1000.0f, 0.0f, 1.0f);
+        consts.lightDir = glm::vec4(glm::mat3x3(camera.GetViewMatrix()) * glm::vec3(0.0, -1.0f, 0.0f), 1.0f);
         consts.proj = camera.GetProjectionMatrix();
         consts.unproj = glm::inverse(consts.proj);
 

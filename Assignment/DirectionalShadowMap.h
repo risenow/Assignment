@@ -15,7 +15,7 @@ public:
         m_Camera.SetProjectionAsOrtho(-500, 500, -500, 500, 10.0, 5500.0);
 
         D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
-        depthStencilDesc.DepthEnable = FALSE;
+        depthStencilDesc.DepthEnable = TRUE;
         depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
         depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
         depthStencilDesc.StencilEnable = FALSE;
@@ -76,7 +76,6 @@ public:
         m_Camera.SetPosition(lightPosition);
         m_Camera.SetOrientation(lightDirection);
 
-        m_DepthTarget.Bind(device);
         ClearDepthTarget(device, m_DepthTarget);
 
         float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -84,6 +83,8 @@ public:
         device.GetD3D11DeviceContext()->RSSetState(m_RastState);
         device.GetD3D11DeviceContext()->OMSetBlendState(m_BlendState, clearColor, 0xffffffff);
         device.GetD3D11DeviceContext()->OMSetDepthStencilState(m_DepthState, 0);
+
+        BindRenderTargetsDepthTarget(device, {}, m_DepthTarget);
 
         GraphicsViewport viewport = GraphicsViewport(m_DepthTarget);
         viewport.Bind(device);

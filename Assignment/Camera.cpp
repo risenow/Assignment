@@ -1,8 +1,9 @@
 #include "Camera.h"
-
+#include "mathutils.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/quaternion.hpp"
 #include "glm/gtx/matrix_interpolation.hpp"
+#include "glm/gtx/norm.hpp"
 
 #include <iostream>
 
@@ -29,7 +30,7 @@ void Camera::SetOrientation(const glm::vec3& _orientation)
 
     glm::vec3 eyeXZ = orientation;
     eyeXZ.y = 0;
-    eyeXZ = glm::normalize(eyeXZ);
+    eyeXZ = FEQUAL(glm::length2(eyeXZ), 0.0f, 0.001f) ? glm::vec3(0.0f, 0.0f, 0.0f) : glm::normalize(eyeXZ);
     float signZY = glm::sign(glm::cross(eyeXZ, glm::vec3(viewVec.x, 0.0, viewVec.z)).y);
 
     float xzAngleCos = glm::clamp(glm::dot(eyeXZ, orientation), -1.0f, 1.0f); //wtf, normalized vector dot normalized vector gives slightly > 1.0
