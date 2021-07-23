@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{a1c26c6b-b419-4a87-8a0d-7031c4a956b8}</ProjectGuid>
+    <RootNamespace>GfxCullingMethods</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(ProjectDir)/lib</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(ProjectDir)/lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(ProjectDir)/lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>CPU_SIDE_CODE;NOMINMAX;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>DirectXTexEx.lib;DirectXTex.lib;dxguid.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>CPU_SIDE_CODE;NOMINMAX;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;WIN32;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <Optimization>Full</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>DirectXTexExRel_llvm.lib;DirectXTexRel.lib;dxguid.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <DelayLoadDLLs>+</DelayLoadDLLs>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;CPU_SIDE_CODE;NOMINMAX;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>DirectXTexEx64.lib;DirectXTex64.lib;dxguid.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NOMINMAX;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AABB.cpp" />
+    <ClCompile Include="BasicPixelShaderStorage.cpp" />
+    <ClCompile Include="BasicVertexShaderStorage.cpp" />
+    <ClCompile Include="BVHFrustumVisibility.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DemoScene1Generate.cpp" />
+    <ClCompile Include="DepthResolveCopyShaderStorage.cpp" />
+    <ClCompile Include="DisplayAdaptersList.cpp" />
+    <ClCompile Include="dxerrorcodesinterpreteutil.cpp" />
+    <ClCompile Include="GfxCullingMethods.cpp" />
+    <ClCompile Include="gfxutils.cpp" />
+    <ClCompile Include="GPUDrivenRendering.cpp" />
+    <ClCompile Include="GraphicsBuffer.cpp" />
+    <ClCompile Include="GraphicsConstantsBuffer.cpp" />
+    <ClCompile Include="GraphicsDevice.cpp" />
+    <ClCompile Include="GraphicsInputLayout.cpp" />
+    <ClCompile Include="GraphicsShader.cpp" />
+    <ClCompile Include="GraphicsSurface.cpp" />
+    <ClCompile Include="GraphicsSwapChain.cpp" />
+    <ClCompile Include="GraphicsTextureCollection.cpp" />
+    <ClCompile Include="GraphicsViewport.cpp" />
+    <ClCompile Include="helperutil.cpp" />
+    <ClCompile Include="ImmediateRenderer.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="LoPoApproxGeom.cpp" />
+    <ClCompile Include="mathutils.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MouseKeyboardCameraController.cpp" />
+    <ClCompile Include="multisampleutils.cpp" />
+    <ClCompile Include="pathutils.cpp" />
+    <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="randomutils.cpp" />
+    <ClCompile Include="ResolveCopyDepth.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="strutils.cpp" />
+    <ClCompile Include="SuperMesh.cpp" />
+    <ClCompile Include="SuperMeshInstance.cpp" />
+    <ClCompile Include="SuperViewport.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="timeutils.cpp" />
+    <ClCompile Include="tiny_obj_loader.cc" />
+    <ClCompile Include="VertexData.cpp" />
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="winerrorcodesinterpreteutil.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AABB.h" />
+    <ClInclude Include="areahelper.h" />
+    <ClInclude Include="arrayutil.h" />
+    <ClInclude Include="BasicPixelShaderStorage.h" />
+    <ClInclude Include="BasicVertexShaderStorage.h" />
+    <ClInclude Include="BVH.h" />
+    <ClInclude Include="BVHFrustumVisibility.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="ConstantsPreprocessing.h" />
+    <ClInclude Include="CullConsts.h" />
+    <ClInclude Include="DemoScene1Generate.h" />
+    <ClInclude Include="DepthResolveCopyShaderStorage.h" />
+    <ClInclude Include="DisplayAdaptersList.h" />
+    <ClInclude Include="DrawInstancedIndirectArgs.h" />
+    <ClInclude Include="dxerrorcodesinterpreteutil.h" />
+    <ClInclude Include="dxlogicsafety.h" />
+    <ClInclude Include="GenHiZConsts.h" />
+    <ClInclude Include="gfxutils.h" />
+    <ClInclude Include="GPUDrivenRenderer.h" />
+    <ClInclude Include="GraphicsBuffer.h" />
+    <ClInclude Include="GraphicsConstantsBuffer.h" />
+    <ClInclude Include="GraphicsDevice.h" />
+    <ClInclude Include="GraphicsInputLayout.h" />
+    <ClInclude Include="GraphicsMarker.h" />
+    <ClInclude Include="GraphicsShader.h" />
+    <ClInclude Include="GraphicsSurface.h" />
+    <ClInclude Include="GraphicsSwapchain.h" />
+    <ClInclude Include="GraphicsTextureCollection.h" />
+    <ClInclude Include="GraphicsViewport.h" />
+    <ClInclude Include="helperutil.h" />
+    <ClInclude Include="ImmediateRenderer.h" />
+    <ClInclude Include="LoPoApproxGeom.h" />
+    <ClInclude Include="OctreeFrustumVisibility.h" />
+    <ClInclude Include="PagedPoolSTDAllocator.h" />
+    <ClInclude Include="Portal.h" />
+    <ClInclude Include="randomutils.h" />
+    <ClInclude Include="ResolveCopyDepth.h" />
+    <ClInclude Include="SBB.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="serializeutils.h" />
+    <ClInclude Include="ShaderStorage.h" />
+    <ClInclude Include="SharedAllocList.h" />
+    <ClInclude Include="LinearFrustumVisibility.h" />
+    <ClInclude Include="LinearStack.h" />
+    <ClInclude Include="Log.h" />
+    <ClInclude Include="logicsafety.h" />
+    <ClInclude Include="mathutils.h" />
+    <ClInclude Include="memutils.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshShader.h" />
+    <ClInclude Include="MicrosecondsTimer.h" />
+    <ClInclude Include="MouseKeyboardCameraController.h" />
+    <ClInclude Include="MultisampleType.h" />
+    <ClInclude Include="multisampleutils.h" />
+    <ClInclude Include="Octree.h" />
+    <ClInclude Include="PagedObjPool.h" />
+    <ClInclude Include="pathutils.h" />
+    <ClInclude Include="ObjPool.h" />
+    <ClInclude Include="RenderStatistics.h" />
+    <ClInclude Include="strutils.h" />
+    <ClInclude Include="SuperMesh.h" />
+    <ClInclude Include="SuperMeshInstance.h" />
+    <ClInclude Include="SuperViewport.h" />
+    <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="timeutils.h" />
+    <ClInclude Include="typesalias.h" />
+    <ClInclude Include="VertexData.h" />
+    <ClInclude Include="VertexFormatHelper.h" />
+    <ClInclude Include="Visibility.h" />
+    <ClInclude Include="Window.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
