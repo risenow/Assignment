@@ -8,7 +8,7 @@ public:
 
     float GetScaleFactor();
     glm::vec3 GetScaleFactor3();
-    RenderStatistics Render(GraphicsDevice& device, Camera& camera, size_t passMacro = 0);
+    RenderStatistics Render(GraphicsDevice& device, Camera& camera, bool depthOnly = false, size_t passMacro = 0);
     AABB GetAABB();
     AABB GetSubAABB(size_t i);
 

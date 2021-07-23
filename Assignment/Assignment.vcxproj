@@ -191,6 +191,7 @@
     <ClInclude Include="DeferredLightingConsts.h" />
     <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="DemoScene1Generate.h" />
+    <ClInclude Include="DirectionalShadowMap.h" />
     <ClInclude Include="DisplayAdaptersList.h" />
     <ClInclude Include="dxerrorcodesinterpreteutil.h" />
     <ClInclude Include="dxlogicsafety.h" />

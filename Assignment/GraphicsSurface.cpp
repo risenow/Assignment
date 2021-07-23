@@ -130,7 +130,7 @@ void UnbindRenderTargetsDepthTarget(GraphicsDevice& device, size_t renderTargets
     for (size_t i = 0; i < renderTargetsCount; i++)
         renderViews[i] = nullptr;
 
-    device.GetD3D11DeviceContext()->OMSetRenderTargets(renderTargetsCount, renderViews.data(), nullptr);
+    device.GetD3D11DeviceContext()->OMSetRenderTargets(renderTargetsCount, renderTargetsCount ? renderViews.data():nullptr, nullptr);
 }
 void ClearRenderTarget(GraphicsDevice& device, ColorSurface& colorTarget, glm::vec4 color)
 {

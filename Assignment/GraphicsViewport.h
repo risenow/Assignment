@@ -13,6 +13,7 @@ public:
     GraphicsViewport(const Window& window, NumberRange<float> depthRange = NumberRange<float>(0.0f, 1.0f));
     //GraphicsViewport(const RenderSet& renderSet, NumberRange<float> depthRange = NumberRange<float>(0.0f, 1.0f));
     GraphicsViewport(const ColorSurface& surface, NumberRange<float> depthRange = NumberRange<float>(0.0f, 1.0f));
+    GraphicsViewport(const DepthSurface& surface, NumberRange<float> depthRange = NumberRange<float>(0.0f, 1.0f));
     GraphicsViewport(const BoundRect& bounds, NumberRange<float> depthRange = NumberRange<float>(0.0, 1.0f));
 
     void Bind(GraphicsDevice& device);

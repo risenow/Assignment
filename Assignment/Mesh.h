@@ -32,7 +32,7 @@ public:
     //merge in 1 option
     static void LoadFromFile(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, const std::string& file, std::vector<Mesh*>& meshes, AABB& superAABB);
     
-    RenderStatistics Render(GraphicsDevice& device, Camera& camera, size_t passMacro, const glm::mat4x4& modelMatrix = glm::identity<glm::mat4x4>());
+    RenderStatistics Render(GraphicsDevice& device, Camera& camera, bool depthOnly = false, size_t passMacro = 0, const glm::mat4x4& modelMatrix = glm::identity<glm::mat4x4>());
     RenderStatistics RenderInstanced(GraphicsDevice& device, Camera& camera, GraphicsBuffer& argsBuffer, size_t bufferOffset, GraphicsBuffer& instancesBuffer, size_t instancesOffset);
 
     void Reset(GraphicsDevice& device, VertexData& data, Texture2D* diff, AABB aabb);

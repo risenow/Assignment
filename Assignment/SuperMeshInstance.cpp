@@ -11,9 +11,9 @@ glm::vec3 SuperMeshInstance::GetScaleFactor3()
 {
     return glm::vec3(glm::length(glm::vec3(m_Transform[0])), glm::length(glm::vec3(m_Transform[1])), glm::length(glm::vec3(m_Transform[2])));
 }
-RenderStatistics SuperMeshInstance::Render(GraphicsDevice& device, Camera& camera, size_t passMacro)
+RenderStatistics SuperMeshInstance::Render(GraphicsDevice& device, Camera& camera, bool depthOnly, size_t passMacro)
 {
-    return m_Mesh->Render(device, camera, passMacro, m_Transform);
+    return m_Mesh->Render(device, camera, depthOnly, passMacro, m_Transform);
 }
 AABB SuperMeshInstance::GetAABB()
 {

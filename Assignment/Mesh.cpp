@@ -145,7 +145,7 @@ void Mesh::LoadFromFile(GraphicsDevice& device, GraphicsTextureCollection& textu
 }
 
 
-RenderStatistics Mesh::Render(GraphicsDevice& device, Camera& camera, size_t passMacro, const glm::mat4x4& modelMatrix)
+RenderStatistics Mesh::Render(GraphicsDevice& device, Camera& camera, bool depthOnly, size_t passMacro, const glm::mat4x4& modelMatrix)
 {
     size_t shaderFlags = passMacro;
     if (m_NormalsEnabled)
@@ -158,6 +158,9 @@ RenderStatistics Mesh::Render(GraphicsDevice& device, Camera& camera, size_t pas
     m_PixelShader.Bind(device);
     m_InputLayout.Bind(device);
     m_VertexBuffer.Bind(device);
+
+    if (depthOnly)
+        device.GetD3D11DeviceContext()->PSSetShader(nullptr, nullptr, 0);
 
     ID3D11ShaderResourceView* srv = m_Diffuse->GetSRV();
     device.GetD3D11DeviceContext()->PSSetShaderResources(0, 1, &srv);

@@ -21,6 +21,7 @@
 #include "GraphicsMarker.h"
 #include "DemoScene1Generate.h"
 #include "DeferredRenderer.h"
+#include "DirectionalShadowMap.h"
 #include "randomutils.h"
 #include "basicvsconstants.h"
 
@@ -105,19 +106,26 @@ int main()
     BasicVertexShaderStorage::GetInstance().Load(device);
 
     DeferredRenderer renderer(device, colorTarget);
+    DirectionalShadowMap shadowMap(device);
 
     SuperMesh* mesh = SuperMesh::FromFile(device, textureCollection, "Data/Sponza-master/sponza.obj");
     SuperMeshInstance* meshInst = new SuperMeshInstance(mesh, glm::identity<glm::mat4x4>());
     
     renderer.Consume({ meshInst });
+    shadowMap.Consume({ meshInst });
 
     while (!window.IsClosed())
     {
+        device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
+        device.GetD3D11DeviceContext()->OMSetDepthStencilState(noDepthStencilState, 0);
+
         viewport.Bind(device);
 
         renderer.Render(device, camera);
 
         renderer.FlushTo(device, *colorTarget.GetTexture());
+
+        shadowMap.Render(device, glm::vec3(0.0f, 1000.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
         swapchain.Present();
         device.OnPresent();

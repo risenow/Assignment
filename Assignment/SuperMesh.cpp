@@ -7,11 +7,11 @@ SuperMesh::SuperMesh(const std::vector<Mesh*> meshes) : m_Meshes(meshes)
         m_AABB.Extend(mesh->GetAABB());
 }
 
-RenderStatistics SuperMesh::Render(GraphicsDevice& device, Camera& camera, size_t passMacro, const glm::mat4x4& modelMatrix)
+RenderStatistics SuperMesh::Render(GraphicsDevice& device, Camera& camera, bool depthOnly, size_t passMacro, const glm::mat4x4& modelMatrix)
 {
     RenderStatistics stats;
     for (Mesh* mesh : m_Meshes)
-        stats += mesh->Render(device, camera, passMacro, modelMatrix);
+        stats += mesh->Render(device, camera, depthOnly, passMacro, modelMatrix);
     return stats;
 }
 
