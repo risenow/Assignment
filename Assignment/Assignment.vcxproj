@@ -183,6 +183,8 @@
     <ClInclude Include="AABB.h" />
     <ClInclude Include="areahelper.h" />
     <ClInclude Include="arrayutil.h" />
+    <ClInclude Include="BasicPixelShaderStorage.h" />
+    <ClInclude Include="BasicVertexShaderStorage.h" />
     <ClInclude Include="basicvsconstants.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantsPreprocessing.h" />

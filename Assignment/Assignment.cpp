@@ -12,6 +12,8 @@
 #include "GraphicsViewport.h"
 #include "GraphicsTextureCollection.h"
 #include "MouseKeyboardCameraController.h"
+#include "BasicPixelShaderStorage.h"
+#include "BasicVertexShaderStorage.h"
 #include "Camera.h"
 #include "SuperViewport.h"
 #include "DisplayAdaptersList.h"
@@ -26,30 +28,9 @@ Camera CreateInitialCamera(float aspect)
     const glm::vec3 position = glm::vec3(0.0f, .0f, 0.0f);
     const glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
     Camera camera = Camera(position, rotation);
-    camera.SetProjection(75.5f, aspect, 0.1f, 100000.0f);//(90.5f, aspect, 0.1f, 100000.0f);
+    camera.SetProjection(75.5f, aspect, 0.1f, 100000.0f);
 
     return camera;
-}
-
-static const float Camera2FixedY = 4000.0f;
-
-Camera CreateInitialCamera2(float aspect)
-{
-    const glm::vec3 position = glm::vec3(0.0f, Camera2FixedY, -550.0f);
-    const glm::vec3 rotation = glm::vec3(-3.14f / 2.0f, 0.0f, 0.0f);
-    Camera camera = Camera(position, rotation);
-    camera.SetProjection(45.0f, aspect, 0.1f, 100000.0f);
-
-    return camera;
-}
-
-glm::mat4x4 CreatePawnTranform(const Camera& camera)
-{
-    glm::vec3 cameraRot = camera.GetRotation();
-    glm::mat4x4 pawnTransform = glm::rotate(glm::scale(glm::identity<glm::mat4x4>(), glm::vec3(100.0f, 100.0f, 100.0f)), cameraRot.y, glm::vec3(0.0, 1.0, 0.0));
-    pawnTransform[3] = glm::vec4(camera.GetPosition(), 1.0f);
-
-    return pawnTransform;
 }
 
 #define MULTISAMPLE_TYPE MultisampleType::MULTISAMPLE_TYPE_NONE
@@ -119,9 +100,20 @@ int main()
 
     MouseKeyboardCameraController cameraController(camera);
 
+    BasicPixelShaderStorage::GetInstance().Load(device);
+    BasicVertexShaderStorage::GetInstance().Load(device);
+
+    SuperMesh* mesh = SuperMesh::FromFile(device, textureCollection, "Data/Sponza-master/sponza.obj");
+
     while (!window.IsClosed())
     {
         viewport.Bind(device);
+
+        BindRenderTargetsDepthTarget(device, { colorTarget }, depthTarget);
+        ClearRenderTarget(device, colorTarget);
+        ClearDepthTarget(device, depthTarget);
+
+        mesh->Render(device, camera);
 
         swapchain.Present();
         device.OnPresent();

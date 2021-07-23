@@ -2,6 +2,7 @@
 #include <d3d11.h>
 #include "Texture2D.h"
 #include "GraphicsDevice.h"
+#include <glm\glm.hpp>
 
 enum GraphicsSurfaceType
 {
@@ -61,3 +62,8 @@ private:
 
 typedef GraphicsSurface<ID3D11RenderTargetView> ColorSurface;
 typedef GraphicsSurface<ID3D11DepthStencilView> DepthSurface;
+
+
+void BindRenderTargetsDepthTarget(GraphicsDevice& device, const std::vector<ColorSurface>& renderTargets, DepthSurface& depthTarget);
+void ClearRenderTarget(GraphicsDevice& device, ColorSurface& colorTarget, glm::vec4 color = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+void ClearDepthTarget(GraphicsDevice& device, DepthSurface& depthSurface);

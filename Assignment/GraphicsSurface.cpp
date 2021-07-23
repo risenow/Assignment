@@ -1,6 +1,7 @@
 #include "GraphicsSurface.h"
 #include "logicsafety.h"
 #include "dxlogicsafety.h"
+#include <glm/glm.hpp>
 
 
 template<class T>
@@ -114,3 +115,21 @@ void GraphicsSurface<T>::ReleaseGPUData()
 
 template class GraphicsSurface<ID3D11RenderTargetView>;
 template class GraphicsSurface<ID3D11DepthStencilView>;
+
+void BindRenderTargetsDepthTarget(GraphicsDevice& device, const std::vector<ColorSurface>& renderTargets, DepthSurface& depthTarget)
+{
+    std::vector<ID3D11RenderTargetView*> renderViews(renderTargets.size());
+    for (size_t i = 0; i < renderTargets.size(); i++)
+        renderViews[i] = renderTargets[i].GetView();
+
+    device.GetD3D11DeviceContext()->OMSetRenderTargets(renderTargets.size(), renderViews.data(), depthTarget.GetView());
+}
+
+void ClearRenderTarget(GraphicsDevice& device, ColorSurface& colorTarget, glm::vec4 color)
+{
+    device.GetD3D11DeviceContext()->ClearRenderTargetView(colorTarget.GetView(), (float*)&color);
+}
+void ClearDepthTarget(GraphicsDevice& device, DepthSurface& depthSurface)
+{
+    device.GetD3D11DeviceContext()->ClearDepthStencilView(depthSurface.GetView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+}
