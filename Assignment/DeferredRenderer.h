@@ -16,7 +16,7 @@ class DeferredRenderer
 public:
     DeferredRenderer(GraphicsDevice& device, ColorSurface backBuffer) 
     {
-        m_LightingShader = GraphicsShader::FromFile(device, GraphicsShaderType_Compute, L"Data/shaders/lighting.cs");
+        m_LightingShader = GraphicsShader::FromFile(device, GraphicsShaderType_Compute, L"Data/shaders/lightingcs.hlsl");
 
         DeferredLightingConsts consts;
         m_ConstantsBuffer = GraphicsConstantsBuffer<DeferredLightingConsts>(device, consts);
@@ -35,6 +35,10 @@ public:
 
     void Render(GraphicsDevice& device, Camera& camera)
     {
+        ClearRenderTarget(device, m_ColorSurface);
+        ClearRenderTarget(device, m_NormalsSurface);
+        ClearDepthTarget(device, m_DepthSurface);
+
         BindRenderTargetsDepthTarget(device, { m_ColorSurface, m_NormalsSurface }, m_DepthSurface);
 
         for (SuperMeshInstance* mesh : m_Meshes)
@@ -60,6 +64,16 @@ public:
         device.GetD3D11DeviceContext()->CSSetUnorderedAccessViews(0, 1, uavs, nullptr);
 
         device.GetD3D11DeviceContext()->Dispatch(ceilf((float)m_ColorSurface.GetWidth() / 8.0f), ceilf((float)m_ColorSurface.GetHeight() / 8.0f), 1);
+
+        ZeroMemory(srvs, sizeof(srvs));
+        ZeroMemory(uavs, sizeof(uavs));
+        device.GetD3D11DeviceContext()->CSSetShaderResources(0, 3, srvs);
+        device.GetD3D11DeviceContext()->CSSetUnorderedAccessViews(0, 1, uavs, nullptr);
+    }
+
+    void FlushTo(GraphicsDevice& device, Texture2D target)
+    {
+        device.GetD3D11DeviceContext()->CopyResource(target.GetD3D11Texture2D(), m_LightBuffer.GetD3D11Texture2D());
     }
 private:
     void InitGBuffer(GraphicsDevice& device, ColorSurface backBuffer)

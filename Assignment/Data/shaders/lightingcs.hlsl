@@ -29,19 +29,19 @@ void CSEntry(uint GI : SV_GroupIndex, uint3 DTid : SV_DispatchThreadID, uint3 Gi
     Albedo.GetDimensions(width, height);
 
     float2 uv = float2((float)DTid.x / width, (float)DTid.y / height);
-    float2 2dNDC = TCtoNDC(uv);
+    float2 dNDC = TCtoNDC(uv);
 
     uint3 uTC = uint3(DTid.x, DTid.y, 0);
 
     float depth = Depth.Load(uTC);
 
-    float4 ndc = float4(2dNDC.x, 2dNDC.y, depth, 1.0f);
+    float4 ndc = float4(dNDC.x, dNDC.y, depth, 1.0f);
     float4 vPos = mul(unproj, ndc);
-    vPos /= vPos.w;
+    vPos = vPos/ vPos.w;
 
     float3 normal = Normals.Load(uTC);
 
     float3 lightVec = lightPos.xyz - vPos.xyz;
 
-    OutColor[uTC.xy] = Color.Load(uTC) * dot(normal, normalize(lightVec));
+    OutColor[uTC.xy] = Albedo.Load(uTC) * dot(normal, normalize(lightVec));
 }

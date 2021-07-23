@@ -20,6 +20,7 @@
 #include "MicrosecondsTimer.h"
 #include "GraphicsMarker.h"
 #include "DemoScene1Generate.h"
+#include "DeferredRenderer.h"
 #include "randomutils.h"
 #include "basicvsconstants.h"
 
@@ -103,17 +104,20 @@ int main()
     BasicPixelShaderStorage::GetInstance().Load(device);
     BasicVertexShaderStorage::GetInstance().Load(device);
 
+    DeferredRenderer renderer(device, colorTarget);
+
     SuperMesh* mesh = SuperMesh::FromFile(device, textureCollection, "Data/Sponza-master/sponza.obj");
+    SuperMeshInstance* meshInst = new SuperMeshInstance(mesh, glm::identity<glm::mat4x4>());
+    
+    renderer.Consume({ meshInst });
 
     while (!window.IsClosed())
     {
         viewport.Bind(device);
 
-        BindRenderTargetsDepthTarget(device, { colorTarget }, depthTarget);
-        ClearRenderTarget(device, colorTarget);
-        ClearDepthTarget(device, depthTarget);
+        renderer.Render(device, camera);
 
-        mesh->Render(device, camera);
+        renderer.FlushTo(device, *colorTarget.GetTexture());
 
         swapchain.Present();
         device.OnPresent();
