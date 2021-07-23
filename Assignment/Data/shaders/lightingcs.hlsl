@@ -39,7 +39,7 @@ void CSEntry(uint GI : SV_GroupIndex, uint3 DTid : SV_DispatchThreadID, uint3 Gi
     float4 vPos = mul(unproj, ndc);
     vPos = vPos/ vPos.w;
 
-    float3 normal = Normals.Load(uTC);
+    float3 normal = (Normals.Load(uTC))*2.0f - 1.0f;
 
     float3 lightVec = lightPos.xyz - vPos.xyz;
 

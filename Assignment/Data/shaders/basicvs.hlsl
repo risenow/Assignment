@@ -19,6 +19,7 @@ void VSEntry(
     ,uint instanceID : SV_InstanceID
 #endif
              ,out float4 opos : SV_POSITION
+            ,out float4 vpos : POSITION1
 #ifdef NORMALS_ENABLED
              ,out float4 onormal : NORMAL1
 #endif
@@ -38,7 +39,7 @@ void VSEntry(
 #ifdef INSTANCED
     wpos = mul(instances[instanceID + instancesOffset].transform, pos);
 #endif
-    float4 vpos = mul(view, wpos);
+    vpos = mul(view, wpos);
     opos = mul(projection, vpos);
     //opos = pos;
 }
