@@ -52,6 +52,8 @@ public:
     size_t GetHeight() const;
     Texture2D* GetTexture() { return &m_Texture; }
 
+    bool IsValid() { return m_View != nullptr; }
+
     void ReleaseGPUData();
 private:
     T* m_View;
@@ -65,5 +67,6 @@ typedef GraphicsSurface<ID3D11DepthStencilView> DepthSurface;
 
 
 void BindRenderTargetsDepthTarget(GraphicsDevice& device, const std::vector<ColorSurface>& renderTargets, DepthSurface& depthTarget);
+void UnbindRenderTargetsDepthTarget(GraphicsDevice& device, size_t renderTargetsCount);
 void ClearRenderTarget(GraphicsDevice& device, ColorSurface& colorTarget, glm::vec4 color = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 void ClearDepthTarget(GraphicsDevice& device, DepthSurface& depthSurface);

@@ -38,7 +38,7 @@ void CreateView(GraphicsDevice& device, Texture2D texture, ID3D11DepthStencilVie
 
 
 template<class T>
-GraphicsSurface<T>::GraphicsSurface() {}
+GraphicsSurface<T>::GraphicsSurface() : m_View(nullptr), m_TextureIsOwned(false) {}
 
 template<class T>
 GraphicsSurface<T>::GraphicsSurface(GraphicsDevice& device, Texture2D texture)
@@ -124,7 +124,14 @@ void BindRenderTargetsDepthTarget(GraphicsDevice& device, const std::vector<Colo
 
     device.GetD3D11DeviceContext()->OMSetRenderTargets(renderTargets.size(), renderViews.data(), depthTarget.GetView());
 }
+void UnbindRenderTargetsDepthTarget(GraphicsDevice& device, size_t renderTargetsCount)
+{
+    std::vector<ID3D11RenderTargetView*> renderViews(renderTargetsCount);
+    for (size_t i = 0; i < renderTargetsCount; i++)
+        renderViews[i] = nullptr;
 
+    device.GetD3D11DeviceContext()->OMSetRenderTargets(renderTargetsCount, renderViews.data(), nullptr);
+}
 void ClearRenderTarget(GraphicsDevice& device, ColorSurface& colorTarget, glm::vec4 color)
 {
     device.GetD3D11DeviceContext()->ClearRenderTargetView(colorTarget.GetView(), (float*)&color);

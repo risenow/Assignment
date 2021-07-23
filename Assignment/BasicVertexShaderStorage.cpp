@@ -3,4 +3,4 @@
 
 size_t BasicVertexShaderStorage::NORMALS_ENABLED = 1;
 size_t BasicVertexShaderStorage::TEXCOORDS_ENABLED = 1;
-size_t BasicVertexShaderStorage::INSTANCED = 1;
+size_t BasicVertexShaderStorage::GBUFFER = 1;

@@ -188,6 +188,8 @@
     <ClInclude Include="basicvsconstants.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantsPreprocessing.h" />
+    <ClInclude Include="DeferredLightingConsts.h" />
+    <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="DemoScene1Generate.h" />
     <ClInclude Include="DisplayAdaptersList.h" />
     <ClInclude Include="dxerrorcodesinterpreteutil.h" />
@@ -206,6 +208,9 @@
     <ClInclude Include="helperutil.h" />
     <ClInclude Include="LinearStack.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="SuperMesh.h" />
+    <ClInclude Include="SuperMeshInstance.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

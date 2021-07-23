@@ -145,9 +145,9 @@ void Mesh::LoadFromFile(GraphicsDevice& device, GraphicsTextureCollection& textu
 }
 
 
-RenderStatistics Mesh::Render(GraphicsDevice& device, Camera& camera, const glm::mat4x4& modelMatrix)
+RenderStatistics Mesh::Render(GraphicsDevice& device, Camera& camera, size_t passMacro, const glm::mat4x4& modelMatrix)
 {
-    size_t shaderFlags = 0;
+    size_t shaderFlags = passMacro;
     if (m_NormalsEnabled)
         shaderFlags = shaderFlags | BasicVertexShaderStorage::NORMALS_ENABLED;
     if (m_TexCoordsEnabled)
@@ -180,7 +180,7 @@ RenderStatistics Mesh::Render(GraphicsDevice& device, Camera& camera, const glm:
 }
 RenderStatistics Mesh::RenderInstanced(GraphicsDevice& device, Camera& camera, GraphicsBuffer& argsBuffer, size_t bufferOffset, GraphicsBuffer& instancesBuffer, size_t instancesOffset)
 {
-    size_t shaderFlags = BasicVertexShaderStorage::INSTANCED;
+    size_t shaderFlags = 0;
     if (m_NormalsEnabled)
         shaderFlags = shaderFlags | BasicVertexShaderStorage::NORMALS_ENABLED;
     if (m_TexCoordsEnabled)
