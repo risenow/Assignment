@@ -37,11 +37,12 @@ auto GraphicsTextureCollection::Add(GraphicsDevice& device, const std::string& f
     {
         ID3D11Resource* res;
         ID3D11ShaderResourceView* srv;
-        HRESULT hr = DirectX::CreateWICTextureFromFile(device.GetD3D11Device(), strtowstr_fast(file).c_str(), (ID3D11Resource**)&res, &srv);
+        HRESULT hr = DirectX::CreateWICTextureFromFile(device.GetD3D11Device(), device.GetD3D11DeviceContext(), strtowstr_fast(file).c_str(), (ID3D11Resource**)&res, &srv);
 
         if (SUCCEEDED(hr))
         {
             auto i = insert({ file, std::make_shared<Texture2D>(device, (ID3D11Texture2D*)res, srv) });
+
             return i.first;
         }
 

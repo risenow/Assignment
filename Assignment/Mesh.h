@@ -10,6 +10,8 @@
 #include "VertexFormatHelper.h"
 #include "GraphicsConstantsBuffer.h"
 #include "RenderStatistics.h"
+#include "MaterialData.h"
+#include "BasicPSConsts.h"
 #include "basicvsconstants.h"
 #include "pathutils.h"
 #include "gfxutils.h"
@@ -46,13 +48,16 @@ public:
     AABB GetAABB();
 private:
     int m_VertexCount;
-    Texture2D* m_Diffuse;
+    Material m_Material;
     VertexBuffer m_VertexBuffer;
     GraphicsConstantsBuffer<BasicVSConsts> m_ConstantsBuffer;
+    GraphicsConstantsBuffer<BasicPSConsts> m_PSConstantsBuffer;
     GraphicsShader m_VertexShader;
     GraphicsShader m_PixelShader;
     GraphicsInputLayout m_InputLayout;
     AABB m_AABB;
+
+
 
     bool m_NormalsEnabled;
     bool m_TexCoordsEnabled;

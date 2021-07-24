@@ -147,6 +147,7 @@
     <ClCompile Include="BasicPixelShaderStorage.cpp" />
     <ClCompile Include="BasicVertexShaderStorage.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DeferredLightingShaderStorage.cpp" />
     <ClCompile Include="DisplayAdaptersList.cpp" />
     <ClCompile Include="dxerrorcodesinterpreteutil.cpp" />
     <ClCompile Include="gfxutils.cpp" />
@@ -184,11 +185,13 @@
     <ClInclude Include="areahelper.h" />
     <ClInclude Include="arrayutil.h" />
     <ClInclude Include="BasicPixelShaderStorage.h" />
+    <ClInclude Include="BasicPSConsts.h" />
     <ClInclude Include="BasicVertexShaderStorage.h" />
     <ClInclude Include="basicvsconstants.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantsPreprocessing.h" />
     <ClInclude Include="DeferredLightingConsts.h" />
+    <ClInclude Include="DeferredLightingShaderStorage.h" />
     <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="DemoScene1Generate.h" />
     <ClInclude Include="DirectionalShadowMap.h" />
@@ -209,6 +212,7 @@
     <ClInclude Include="helperutil.h" />
     <ClInclude Include="LinearStack.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="MaterialData.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="SuperMesh.h" />
     <ClInclude Include="SuperMeshInstance.h" />

@@ -2,7 +2,7 @@
 #include "BasicVertexShaderStorage.h"
 #include "BasicPixelShaderStorage.h"
 
-Mesh::Mesh() : m_Diffuse(nullptr), m_VertexCount(0), m_TexCoordsEnabled(false), m_NormalsEnabled(false) {}
+Mesh::Mesh() : m_VertexCount(0), m_TexCoordsEnabled(false), m_NormalsEnabled(false) {}
 
 GraphicsShader& Mesh::GetVertexShader(GraphicsDevice& dev)
 {
@@ -37,9 +37,12 @@ void Mesh::FromVertexData(GraphicsDevice& device, GraphicsTextureCollection& tex
     BasicVSConsts temp;
     currMesh->m_ConstantsBuffer = GraphicsConstantsBuffer<BasicVSConsts>(device, temp);
     assert(currMesh->m_ConstantsBuffer.GetBuffer());
+    BasicPSConsts psTemp;
+    currMesh->m_PSConstantsBuffer = GraphicsConstantsBuffer<BasicPSConsts>(device, psTemp);
+    assert(currMesh->m_PSConstantsBuffer.GetBuffer());
 
     Texture2D* diff = diffuse;
-    currMesh->m_Diffuse = diff != nullptr ? diff : textureCollection.GetWhiteTexture();
+    currMesh->m_Material.m_Diffuse = diff != nullptr ? diff : textureCollection.GetWhiteTexture();
 }
 
 //TODO(instancing):
@@ -70,15 +73,40 @@ void Mesh::LoadFromFile(GraphicsDevice& device, GraphicsTextureCollection& textu
 
     std::vector<Texture2D*> diffTexs;
     diffTexs.reserve(materials.size());
+    std::vector<Texture2D*> specTexs;
+    specTexs.reserve(materials.size());
+
+    //std::vector<glm::vec3> specs;
+    std::vector<float> specs;
+    specs.reserve(materials.size());
 
     for (const tinyobj::material_t& mat : materials)
     {
+        //specs.push_back(glm::vec3(mat.specular[0], mat.specular[1], mat.specular[2]));
+        specs.push_back(mat.shininess);
+
         diffTexs.push_back(mat.diffuse_texname.size() ? textureCollection.RequestTexture(device, path + mat.diffuse_texname) : nullptr);
+        //specTexs.push_back(mat.spec.size() ? textureCollection.RequestTexture(device, path + mat.diffuse_texname) : nullptr);
+
     }
 
     for (size_t s = 0; s < shapes.size(); s++)
     {
+        
         const tinyobj::shape_t& shape = shapes[s];
+
+        bool moreThanOneMat = false;
+        for (size_t i = 1; i < shape.mesh.material_ids.size(); i++)
+        {
+            if (shape.mesh.material_ids[i - 1] != shape.mesh.material_ids[i])
+            {
+                moreThanOneMat = true;
+                break;
+            }
+        }
+        if (moreThanOneMat)
+            continue;
+
         const std::vector<tinyobj::index_t>& indices = shape.mesh.indices;
         const std::vector<unsigned char>& num_face_verts = shape.mesh.num_face_vertices;
 
@@ -138,9 +166,13 @@ void Mesh::LoadFromFile(GraphicsDevice& device, GraphicsTextureCollection& textu
         BasicVSConsts temp;
         currMesh->m_ConstantsBuffer = GraphicsConstantsBuffer<BasicVSConsts>(device, temp);
         assert(currMesh->m_ConstantsBuffer.GetBuffer());
+        BasicPSConsts pstemp;
+        currMesh->m_PSConstantsBuffer = GraphicsConstantsBuffer<BasicPSConsts>(device, pstemp);
+        assert(currMesh->m_PSConstantsBuffer.GetBuffer());
 
         Texture2D* diff = shape.mesh.material_ids[0] == -1 ? textureCollection.GetWhiteTexture() : diffTexs[shape.mesh.material_ids[0]];
-        currMesh->m_Diffuse = diff != nullptr ? diff : textureCollection.GetWhiteTexture();
+        currMesh->m_Material.m_Shininess = specs[shape.mesh.material_ids[0]];
+        currMesh->m_Material.m_Diffuse = diff != nullptr ? diff : textureCollection.GetWhiteTexture();
     }
 }
 
@@ -162,7 +194,7 @@ RenderStatistics Mesh::Render(GraphicsDevice& device, Camera& camera, bool depth
     if (depthOnly)
         device.GetD3D11DeviceContext()->PSSetShader(nullptr, nullptr, 0);
 
-    ID3D11ShaderResourceView* srv = m_Diffuse->GetSRV();
+    ID3D11ShaderResourceView* srv = m_Material.m_Diffuse->GetSRV();//m_Diffuse->GetSRV();
     device.GetD3D11DeviceContext()->PSSetShaderResources(0, 1, &srv);
     ID3D11SamplerState* sampler = GetTrilinearSampler(device);
     device.GetD3D11DeviceContext()->PSSetSamplers(0, 1, &sampler);
@@ -172,9 +204,17 @@ RenderStatistics Mesh::Render(GraphicsDevice& device, Camera& camera, bool depth
     consts.projection = camera.GetProjectionMatrix();
     consts.model = modelMatrix;
 
+    BasicPSConsts psConsts;
+    psConsts.shin = m_Material.m_Shininess;
+
     GraphicsConstantsBuffer<BasicVSConsts>& constsBuffer = m_ConstantsBuffer;
     constsBuffer.Update(device, consts);
-    constsBuffer.Bind(device, GraphicsShaderMask_Vertex | GraphicsShaderMask_Pixel, 0);
+    //constsBuffer.Bind(device, GraphicsShaderMask_Vertex | GraphicsShaderMask_Pixel, 0);
+    GraphicsConstantsBuffer<BasicPSConsts>& psConstsBuffer = m_PSConstantsBuffer;
+    psConstsBuffer.Update(device, psConsts);
+    //psConstsBuffer.Bind(device, GraphicsShaderMask_Pixel, 0);
+
+    BindMultipleGraphicsConstantBuffers(device, 0, { &constsBuffer, &psConstsBuffer }, GraphicsShaderMask_Vertex | GraphicsShaderMask_Pixel);
 
     device.GetD3D11DeviceContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     device.GetD3D11DeviceContext()->Draw(m_VertexCount, 0);
@@ -195,7 +235,7 @@ RenderStatistics Mesh::RenderInstanced(GraphicsDevice& device, Camera& camera, G
     m_InputLayout.Bind(device);
     m_VertexBuffer.Bind(device);
 
-    ID3D11ShaderResourceView* srv = m_Diffuse->GetSRV();
+    ID3D11ShaderResourceView* srv = m_Material.m_Diffuse->GetSRV();
     device.GetD3D11DeviceContext()->PSSetShaderResources(0, 1, &srv);
     ID3D11SamplerState* sampler = GetTrilinearSampler(device);
     device.GetD3D11DeviceContext()->PSSetSamplers(0, 1, &sampler);
@@ -225,7 +265,7 @@ RenderStatistics Mesh::RenderInstanced(GraphicsDevice& device, Camera& camera, G
 void Mesh::Reset(GraphicsDevice& device, VertexData& data, Texture2D* diff, AABB aabb)
 {
     m_AABB = aabb;
-    m_Diffuse = diff;
+    m_Material.m_Diffuse = diff;
     m_VertexBuffer = VertexBuffer(device, data);
     m_VertexShader = GetVertexShader(device);
     m_PixelShader = GetPixelShader(device);

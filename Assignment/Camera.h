@@ -144,8 +144,6 @@ public:
 
     AABB CalcFrustumAABB()
     {
-        Camera::Frustum fr;
-
         AABB res;
 
         float halfHnear = glm::tan(glm::radians(m_Fov / 2.0f)) * m_Near;

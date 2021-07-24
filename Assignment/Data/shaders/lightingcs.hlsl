@@ -23,6 +23,25 @@ float2 TCtoNDC(float2 uv)
     return float2(ndc.x, ndc.y * (-1.0f));
 }
 
+
+float4 CorrectGamma(float4 color)
+{
+#ifdef GAMMA_CORRECTION
+    return pow(color, 1.0 / 2.2);
+#else
+    return color;
+#endif
+}
+
+float4 UnCorrectGamma(float4 color)
+{
+#ifdef GAMMA_CORRECTION
+    return pow(color, 2.2);
+#else
+    return color;
+#endif
+}
+
 [numthreads(8, 8, 1)]
 void CSEntry(uint GI : SV_GroupIndex, uint3 DTid : SV_DispatchThreadID, uint3 Gid : SV_GroupID)
 {
@@ -42,7 +61,7 @@ void CSEntry(uint GI : SV_GroupIndex, uint3 DTid : SV_DispatchThreadID, uint3 Gi
     float4 vPos = mul(unproj, ndc);
     vPos = vPos/ vPos.w;
 
-    float4 albedo = Albedo.Load(uTC);
+    float3 albedo = UnCorrectGamma(Albedo.Load(uTC)).rgb;
 
     float4 wPos = mul(unview, vPos);
 
@@ -57,9 +76,21 @@ void CSEntry(uint GI : SV_GroupIndex, uint3 DTid : SV_DispatchThreadID, uint3 Gi
 
     float shadowFactor = min((ShadowMap.SampleCmpLevelZero(ShadowSampler, shadow_UV, shadow_Z - 0.01).r + 0.35), 1.0);
 
-    float3 normal = (Normals.Load(uTC))*2.0f - 1.0f;
+    float4 normalShin = Normals.Load(uTC);//(Normals.Load(uTC))*2.0f - 1.0f;
+    float shin = normalShin.w * 128.0f;
+    shin = shin == 0.0f ? 70.0f : shin;
 
-    float3 lightVec = lightDir;
+    float3 normal = normalShin.xyz * 2.0f - 1.0f;
 
-    OutColor[uTC.xy] = shadowFactor * albedo * dot(normal, normalize(-lightVec)) + albedo*0.35;
+    float3 lightVec = normalize(lightDir);
+
+    float3 r = normalize(reflect(normal, lightVec));
+
+    const float3 spec = float3(1.0, 1.0f, 1.0f);
+    const float ambCoef = 0.35f;
+
+    float3 amb = ambCoef * albedo;
+    float lit = pow(max(dot(-r, normalize(-vPos)), 0.0f), shin) * spec + albedo * max(dot(normal, -lightVec), 0.0f);
+
+    OutColor[uTC.xy] = CorrectGamma(float4(shadowFactor * lit + amb, 1.0f));
 }

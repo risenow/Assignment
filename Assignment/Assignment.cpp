@@ -14,6 +14,7 @@
 #include "MouseKeyboardCameraController.h"
 #include "BasicPixelShaderStorage.h"
 #include "BasicVertexShaderStorage.h"
+#include "DeferredLightingShaderStorage.h"
 #include "Camera.h"
 #include "SuperViewport.h"
 #include "DisplayAdaptersList.h"
@@ -104,11 +105,12 @@ int main()
 
     BasicPixelShaderStorage::GetInstance().Load(device);
     BasicVertexShaderStorage::GetInstance().Load(device);
+    DeferredLightingShaderStorage::GetInstance().Load(device);
 
     DeferredRenderer renderer(device, colorTarget);
     DirectionalShadowMap shadowMap(device);
 
-    SuperMesh* mesh = SuperMesh::FromFile(device, textureCollection, "Data/Sponza-master/sponza.obj");
+    SuperMesh* mesh = SuperMesh::FromFile(device, textureCollection, "Data/sponza2/sponza.obj");
     SuperMeshInstance* meshInst = new SuperMeshInstance(mesh, glm::identity<glm::mat4x4>());
     
     renderer.Consume({ meshInst });

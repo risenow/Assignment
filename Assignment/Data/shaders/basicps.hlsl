@@ -1,4 +1,5 @@
 #include "basicvsconstants.h"
+#include "BasicPSConsts.h"
 
 SamplerState Sampler;
 Texture2D diffuseMap: register(t0);
@@ -18,9 +19,12 @@ PS_OUTPUT PSEntry(
     in float2 tc : TEXCOORD1) : SV_TARGET
 {
     PS_OUTPUT output;
-    output.Color = diffuseMap.Sample(Sampler, tc);
+    output.Color = diffuseMap.Sample(Sampler, float2(tc.x, 1.0f - tc.y));
 #ifdef GBUFFER_PASS
-    output.Normal = (float4(mul((float3x3)view, normalize(float3(normal.x, normal.y, normal.z))), 1.0f) + 1.0f)*0.5f;
+    float4 n = (float4(mul((float3x3)view, normalize(float3(normal.x, normal.y, normal.z))), 1.0f) + 1.0f) * 0.5f;
+    n.w = shin/128.0f;
+
+    output.Normal = n;
 #endif
     return output;
 }

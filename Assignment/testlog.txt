@@ -1,17 +1,21 @@
-[TIME:213] Adapters enumerated:
-[TIME:213] Adapter index: 0
-[TIME:213] Description: NVIDIA GeForce GTX 1650 Ti
-[TIME:213] 
-[TIME:213] Adapter index: 1
-[TIME:213] Description: Microsoft Basic Render Driver
-[TIME:213] 
-C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(14,17): warning X3576: semantics in type overridden by variable/function or enclosing type
-C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(14,17): warning X3576: semantics in type overridden by variable/function or enclosing type
-C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(14,17): warning X3576: semantics in type overridden by variable/function or enclosing type
-C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(14,17): warning X3576: semantics in type overridden by variable/function or enclosing type
-C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(14,17): warning X3576: semantics in type overridden by variable/function or enclosing type
-C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(14,17): warning X3576: semantics in type overridden by variable/function or enclosing type
-C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(14,17): warning X3576: semantics in type overridden by variable/function or enclosing type
-C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(14,17): warning X3576: semantics in type overridden by variable/function or enclosing type
-C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\lightingcs.hlsl(60,12-51): warning X3206: implicit truncation of vector type
-C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\lightingcs.hlsl(62,12-30): warning X3206: implicit truncation of vector type
+[TIME:61] Adapters enumerated:
+[TIME:61] Adapter index: 0
+[TIME:61] Description: NVIDIA GeForce GTX 1650 Ti
+[TIME:61] 
+[TIME:61] Adapter index: 1
+[TIME:61] Description: Microsoft Basic Render Driver
+[TIME:61] 
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\lightingcs.hlsl(85,12-41): warning X3206: implicit truncation of vector type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\lightingcs.hlsl(93,25-49): warning X3206: 'dot': implicit truncation of vector type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\lightingcs.hlsl(93,11-115): warning X3206: implicit truncation of vector type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\lightingcs.hlsl(85,12-41): warning X3206: implicit truncation of vector type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\lightingcs.hlsl(93,25-49): warning X3206: 'dot': implicit truncation of vector type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\lightingcs.hlsl(93,11-115): warning X3206: implicit truncation of vector type

@@ -17,7 +17,7 @@ class DeferredRenderer
 public:
     DeferredRenderer(GraphicsDevice& device, ColorSurface backBuffer) 
     {
-        m_LightingShader = GraphicsShader::FromFile(device, GraphicsShaderType_Compute, L"Data/shaders/lightingcs.hlsl");
+        //m_LightingShader = GraphicsShader::FromFile(device, GraphicsShaderType_Compute, L"Data/shaders/lightingcs.hlsl");
 
         DeferredLightingConsts consts;
         m_ConstantsBuffer = GraphicsConstantsBuffer<DeferredLightingConsts>(device, consts);
@@ -82,6 +82,8 @@ public:
             mesh->Render(device, camera, false, BasicPixelShaderStorage::GBUFFER);
 
         UnbindRenderTargetsDepthTarget(device, 2);
+
+        m_LightingShader = DeferredLightingShaderStorage::GetInstance().GetShader(DeferredLightingShaderStorage::GAMMA_CORRECTION);
 
         m_LightingShader.Bind(device);
         
