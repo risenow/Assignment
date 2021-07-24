@@ -68,6 +68,12 @@ public:
         m_DepthTarget = DepthSurface(device, WIDTH, HEIGHT, 1, 1, DXGI_FORMAT_R24G8_TYPELESS, GetSampleDesc(device, DXGI_FORMAT_D24_UNORM_S8_UINT, MultisampleType::MULTISAMPLE_TYPE_NONE), D3D11_USAGE_DEFAULT, D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE, 0, 0);
     }
 
+    void OnFrameBegin()
+    {
+        float scale = 2.0f;
+        m_Camera.SetProjectionAsOrtho(-1000 * scale, 1000 * scale, -1000 * scale, 1000 * scale, 10.0, 5500.0);
+    }
+
     Texture2D* GetShadowMapTexture()
     {
         return m_DepthTarget.GetTexture();
@@ -99,9 +105,6 @@ public:
             mesh->Render(device, m_Camera, true);
 
         device.GetD3D11DeviceContext()->ClearState();
-
-        float scale = 2.0f;
-        m_Camera.SetProjectionAsOrtho(-1000 * scale, 1000 * scale, -1000 * scale, 1000 * scale, 10.0, 5500.0);
     }
 
     Camera& GetCamera()

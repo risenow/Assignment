@@ -144,10 +144,12 @@ public:
 
     AABB CalcFrustumAABB()
     {
+        Camera::Frustum fr;
+
         AABB res;
 
-        float halfHnear = tan(m_Fov / 2) * m_Near;//2 * tan(m_Fov / 2) * m_Near;
-        float halfWnear = halfHnear * m_Aspect;
+        float halfHnear = glm::tan(glm::radians(m_Fov / 2.0f)) * m_Near;
+        float halfWnear = halfHnear * (m_Aspect);
 
         glm::vec3 center = m_Position + m_ViewVec * m_Near;
         res.Extend(center + m_TopVec * halfHnear - m_LeftVec * halfWnear);
@@ -155,8 +157,8 @@ public:
         res.Extend(center - m_TopVec * halfHnear - m_LeftVec * halfWnear);
         res.Extend(center - m_TopVec * halfHnear + m_LeftVec * halfWnear);
 
-        float halfHfar = tan(m_Fov / 2) * m_Far;//2 * tan(m_Fov / 2) * m_Near;
-        float halfWfar = halfHfar * m_Aspect;
+        float halfHfar = glm::tan(glm::radians(m_Fov / 2.0f)) * m_Far;
+        float halfWfar = halfHfar * (m_Aspect);
 
         center = m_Position + m_ViewVec * m_Far;
         res.Extend(center + m_TopVec * halfHfar - m_LeftVec * halfWfar);

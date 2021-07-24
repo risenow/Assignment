@@ -116,6 +116,11 @@ int main()
 
     while (!window.IsClosed())
     {
+        AABB fr = camera.CalcFrustumAABB();
+        window.SetTitle("min x " + std::to_string(fr.m_Min.x) + "; min z " + std::to_string(fr.m_Min.z) + "; max x " + std::to_string(fr.m_Max.x) + +"; max z " + std::to_string(fr.m_Max.z));
+
+        shadowMap.OnFrameBegin();
+
         shadowMap.Render(device, camera, meshInst->GetAABB(), glm::vec3(0.0f, 2000.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 
         device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
