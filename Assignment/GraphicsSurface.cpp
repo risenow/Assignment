@@ -51,7 +51,7 @@ GraphicsSurface<T>::GraphicsSurface(GraphicsDevice& device, size_t width, size_t
     unsigned int mipLevels, unsigned int arraySize, DXGI_FORMAT dxgiFormat,
     DXGI_SAMPLE_DESC sampleDesc, D3D11_USAGE usage, UINT bindFlags,
     UINT cpuAccessFlags, UINT miscFlags)
-    : m_Texture(device, width, height, mipLevels, arraySize, dxgiFormat, sampleDesc, usage, bindFlags, cpuAccessFlags, miscFlags), m_TextureIsOwned(false)
+    : m_Texture(device, width, height, mipLevels, arraySize, dxgiFormat, sampleDesc, usage, bindFlags, cpuAccessFlags, miscFlags), m_TextureIsOwned(true)
 {
     CreateView(device, m_Texture, (T**)(&m_View));
 }

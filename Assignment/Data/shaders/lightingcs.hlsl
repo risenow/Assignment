@@ -74,9 +74,9 @@ void CSEntry(uint GI : SV_GroupIndex, uint3 DTid : SV_DispatchThreadID, uint3 Gi
     float2 shadow_NDC = shadow_pPos.xy;
     float2 shadow_UV = ndcToFlippedUV(shadow_NDC);
 
-    float shadowFactor = min((ShadowMap.SampleCmpLevelZero(ShadowSampler, shadow_UV, shadow_Z - 0.01).r + 0.35), 1.0);
+    float shadowFactor = min((ShadowMap.SampleCmpLevelZero(ShadowSampler, shadow_UV, shadow_Z - 0.01).r ), 1.0);
 
-    float4 normalShin = Normals.Load(uTC);//(Normals.Load(uTC))*2.0f - 1.0f;
+    float4 normalShin = Normals.Load(uTC);
     float shin = normalShin.w * 128.0f;
     shin = shin == 0.0f ? 70.0f : shin;
 

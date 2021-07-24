@@ -91,7 +91,6 @@ int main()
     device.GetD3D11DeviceContext()->OMSetDepthStencilState(noDepthStencilState, 0);
 
     ColorSurface colorTarget = swapchain.GetBackBufferSurface();
-    DepthSurface depthTarget(device, colorTarget.GetWidth(), colorTarget.GetHeight(), 1, 1, DXGI_FORMAT_R24G8_TYPELESS, GetSampleDesc(device, DXGI_FORMAT_D24_UNORM_S8_UINT, MULTISAMPLE_TYPE), D3D11_USAGE_DEFAULT, D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE, 0, 0);
 
     Camera camera = CreateInitialCamera((float)window.GetWidth() / (float)window.GetHeight());
     camera.m_UseAngles = true;
@@ -116,6 +115,8 @@ int main()
     renderer.Consume({ meshInst });
     shadowMap.Consume({ meshInst });
 
+    const glm::vec3 lightDir = glm::vec3(0.0f, -1.0f, 0.0f);
+
     while (!window.IsClosed())
     {
         AABB fr = camera.CalcFrustumAABB();
@@ -123,14 +124,25 @@ int main()
 
         shadowMap.OnFrameBegin();
 
-        shadowMap.Render(device, camera, meshInst->GetAABB(), glm::vec3(0.0f, 2000.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        if (!swapchain.IsValid(window, MULTISAMPLE_TYPE))
+        {
+            viewport = GraphicsViewport(BoundRect(Point2D(0, 0), window.GetWidth(), window.GetHeight()));
+
+            device.GetD3D11DeviceContext()->ClearState();
+            swapchain.Validate(device, window, MULTISAMPLE_TYPE);
+
+            colorTarget = swapchain.GetBackBufferSurface();
+            renderer.Validate(device, colorTarget);
+        }
+
+        shadowMap.Render(device, camera, meshInst->GetAABB(), glm::vec3(0.0f, 2000.0f, 0.0f), lightDir);
 
         device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
         device.GetD3D11DeviceContext()->OMSetDepthStencilState(noDepthStencilState, 0);
 
         viewport.Bind(device);
 
-        renderer.Render(device, camera, shadowMap);
+        renderer.Render(device, camera, shadowMap, lightDir);
 
         renderer.FlushTo(device, *colorTarget.GetTexture());
 

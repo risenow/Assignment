@@ -40,23 +40,6 @@ public:
         shadowSamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
         device.GetD3D11Device()->CreateSamplerState(&shadowSamplerDesc, &m_ShadowSampler);
-
-        D3D11_SAMPLER_DESC pointSamplerDesc;
-        shadowSamplerDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
-        shadowSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-        shadowSamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-        shadowSamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-        shadowSamplerDesc.MipLODBias = 0.0f;
-        shadowSamplerDesc.MaxAnisotropy = 1;
-        shadowSamplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-        shadowSamplerDesc.BorderColor[0] = 0;
-        shadowSamplerDesc.BorderColor[1] = 0;
-        shadowSamplerDesc.BorderColor[2] = 0;
-        shadowSamplerDesc.BorderColor[3] = 0;
-        shadowSamplerDesc.MinLOD = 0;
-        shadowSamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-        device.GetD3D11Device()->CreateSamplerState(&pointSamplerDesc, &m_PointSampler);
     }
 
     void Consume(const std::vector<SuperMeshInstance*> meshInsts)
@@ -65,10 +48,20 @@ public:
     }
     void Validate(GraphicsDevice& device, ColorSurface backBuffer)
     {
+        m_ColorSurface = backBuffer;
 
+        size_t newWidth = m_ColorSurface.GetWidth();
+        size_t newHeight = m_ColorSurface.GetHeight();
+
+        if (newWidth != m_DepthSurface.GetWidth() || newHeight != m_DepthSurface.GetHeight())
+        {
+            m_DepthSurface.Resize(device, newWidth, newHeight, MULTISAMPLE_TYPE_NONE);
+            m_NormalsSurface.Resize(device, newWidth, newHeight, MULTISAMPLE_TYPE_NONE);
+            m_LightBuffer.Resize(device, newWidth, newHeight, MULTISAMPLE_TYPE_NONE);
+        }
     }
 
-    void Render(GraphicsDevice& device, Camera& camera, DirectionalShadowMap& shadowMap)
+    void Render(GraphicsDevice& device, Camera& camera, DirectionalShadowMap& shadowMap, const glm::vec3& lightDir)
     {
         Camera& shadowMapCamera = shadowMap.GetCamera();
 
@@ -128,11 +121,6 @@ private:
         m_DepthSurface = DepthSurface(device, width, height, 1, 1, DXGI_FORMAT_R24G8_TYPELESS, GetSampleDesc(device, DXGI_FORMAT_D24_UNORM_S8_UINT, MultisampleType::MULTISAMPLE_TYPE_NONE), D3D11_USAGE_DEFAULT, D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE, 0, 0);
         m_NormalsSurface = ColorSurface(device, width, height, 1, 1, DXGI_FORMAT_R8G8B8A8_UNORM, GetSampleDesc(device, DXGI_FORMAT_R8G8B8A8_UNORM, MultisampleType::MULTISAMPLE_TYPE_NONE), D3D11_USAGE_DEFAULT, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE, 0, 0);
         m_LightBuffer = Texture2D(device, width, height, 1, 1, DXGI_FORMAT_R8G8B8A8_UNORM, GetSampleDesc(device, DXGI_FORMAT_R8G8B8A8_UNORM, MultisampleType::MULTISAMPLE_TYPE_NONE), D3D11_USAGE_DEFAULT, D3D11_BIND_UNORDERED_ACCESS, 0, 0);
-    }
-
-    void LightGBufferTo(GraphicsDevice& deivce, size_t width, size_t height, Texture2D& lightBuffer)
-    {
-
     }
 
     GraphicsShader m_LightingShader;
