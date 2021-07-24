@@ -5,6 +5,7 @@
 #include "BasicPixelShaderStorage.h"
 #include "GraphicsConstantsBuffer.h"
 #include "DeferredLightingConsts.h"
+#include "DirectionalShadowMap.h"
 #include <vector>
 
 //uses backbuffer as color buffer for memory economy
@@ -39,6 +40,23 @@ public:
         shadowSamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
         device.GetD3D11Device()->CreateSamplerState(&shadowSamplerDesc, &m_ShadowSampler);
+
+        D3D11_SAMPLER_DESC pointSamplerDesc;
+        shadowSamplerDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+        shadowSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+        shadowSamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+        shadowSamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+        shadowSamplerDesc.MipLODBias = 0.0f;
+        shadowSamplerDesc.MaxAnisotropy = 1;
+        shadowSamplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+        shadowSamplerDesc.BorderColor[0] = 0;
+        shadowSamplerDesc.BorderColor[1] = 0;
+        shadowSamplerDesc.BorderColor[2] = 0;
+        shadowSamplerDesc.BorderColor[3] = 0;
+        shadowSamplerDesc.MinLOD = 0;
+        shadowSamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+        device.GetD3D11Device()->CreateSamplerState(&pointSamplerDesc, &m_PointSampler);
     }
 
     void Consume(const std::vector<SuperMeshInstance*> meshInsts)
@@ -50,8 +68,10 @@ public:
 
     }
 
-    void Render(GraphicsDevice& device, Camera& camera, const Texture2D& shadowMap)
+    void Render(GraphicsDevice& device, Camera& camera, DirectionalShadowMap& shadowMap)
     {
+        Camera& shadowMapCamera = shadowMap.GetCamera();
+
         ClearRenderTarget(device, m_ColorSurface);
         ClearRenderTarget(device, m_NormalsSurface);
         ClearDepthTarget(device, m_DepthSurface);
@@ -69,22 +89,27 @@ public:
         consts.lightDir = glm::vec4(glm::mat3x3(camera.GetViewMatrix()) * glm::vec3(0.0, -1.0f, 0.0f), 1.0f);
         consts.proj = camera.GetProjectionMatrix();
         consts.unproj = glm::inverse(consts.proj);
+        consts.unview = glm::inverse(camera.GetViewMatrix());
+        consts.shadowview = shadowMapCamera.GetViewMatrix();
+        consts.shadowproj = shadowMapCamera.GetProjectionMatrix();
 
         m_ConstantsBuffer.Update(device, consts);
 
         m_ConstantsBuffer.Bind(device, GraphicsShaderMask_Compute);
 
-        ID3D11ShaderResourceView* srvs[] = { m_DepthSurface.GetTexture()->GetSRV(), m_NormalsSurface.GetTexture()->GetSRV(),  m_ColorSurface.GetTexture()->GetSRV() };
+        ID3D11ShaderResourceView* srvs[] = { m_DepthSurface.GetTexture()->GetSRV(), m_NormalsSurface.GetTexture()->GetSRV(),  m_ColorSurface.GetTexture()->GetSRV(), shadowMap.GetShadowMapTexture()->GetSRV() };
         ID3D11UnorderedAccessView* uavs[] = { m_LightBuffer.GetUAV() };
+        ID3D11SamplerState* samplers[] = { m_ShadowSampler};
 
-        device.GetD3D11DeviceContext()->CSSetShaderResources(0, 3, srvs);
+        device.GetD3D11DeviceContext()->CSSetShaderResources(0, 4, srvs);
         device.GetD3D11DeviceContext()->CSSetUnorderedAccessViews(0, 1, uavs, nullptr);
+        device.GetD3D11DeviceContext()->CSSetSamplers(0, 1, samplers);
 
         device.GetD3D11DeviceContext()->Dispatch(ceilf((float)m_ColorSurface.GetWidth() / 8.0f), ceilf((float)m_ColorSurface.GetHeight() / 8.0f), 1);
 
         ZeroMemory(srvs, sizeof(srvs));
         ZeroMemory(uavs, sizeof(uavs));
-        device.GetD3D11DeviceContext()->CSSetShaderResources(0, 3, srvs);
+        device.GetD3D11DeviceContext()->CSSetShaderResources(0, 4, srvs);
         device.GetD3D11DeviceContext()->CSSetUnorderedAccessViews(0, 1, uavs, nullptr);
     }
 
@@ -117,6 +142,9 @@ private:
     DepthSurface m_DepthSurface;
 
     Texture2D m_LightBuffer;
+
+    ID3D11SamplerState* m_ShadowSampler;
+    ID3D11SamplerState* m_PointSampler;
 
     std::vector<SuperMeshInstance*> m_Meshes;
 };

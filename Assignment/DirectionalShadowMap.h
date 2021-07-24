@@ -12,7 +12,8 @@ class DirectionalShadowMap
 public:
     DirectionalShadowMap(GraphicsDevice& device)
     {
-        m_Camera.SetProjectionAsOrtho(-500, 500, -500, 500, 10.0, 5500.0);
+        float scale = 2.0f;
+        m_Camera.SetProjectionAsOrtho(-1000 * scale, 1000 * scale, -1000 * scale, 1000 * scale, 10.0, 5500.0);
 
         D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
         depthStencilDesc.DepthEnable = TRUE;
@@ -68,7 +69,7 @@ public:
 
     Texture2D* GetShadowMapTexture()
     {
-        return nullptr;//return &m_ShadowMapRenderSet.GetDepthTexture();
+        return m_DepthTarget.GetTexture();
     }
 
     void Render(GraphicsDevice& device,  const glm::vec3& lightPosition, const glm::vec3& lightDirection)
@@ -93,7 +94,6 @@ public:
             mesh->Render(device, m_Camera, true);
 
         device.GetD3D11DeviceContext()->ClearState();
-        //UnbindRenderTargetsDepthTarget(device, 0);
     }
 
     Camera& GetCamera()
