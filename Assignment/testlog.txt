@@ -1,10 +1,10 @@
-[TIME:780] Adapters enumerated:
-[TIME:781] Adapter index: 0
-[TIME:781] Description: NVIDIA GeForce GTX 1650 Ti
-[TIME:781] 
-[TIME:781] Adapter index: 1
-[TIME:781] Description: Microsoft Basic Render Driver
-[TIME:781] 
+[TIME:627] Adapters enumerated:
+[TIME:627] Adapter index: 0
+[TIME:627] Description: NVIDIA GeForce GTX 1650 Ti
+[TIME:627] 
+[TIME:627] Adapter index: 1
+[TIME:627] Description: Microsoft Basic Render Driver
+[TIME:628] 
 C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(14,17): warning X3576: semantics in type overridden by variable/function or enclosing type
 C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(14,17): warning X3576: semantics in type overridden by variable/function or enclosing type
 C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(14,17): warning X3576: semantics in type overridden by variable/function or enclosing type

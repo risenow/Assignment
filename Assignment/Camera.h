@@ -50,6 +50,8 @@ public:
     void SetProjectionAsOrtho(float left, float right, float bottom, float top, float zNear, float zFar);
     void UpdateProjection(float aspect);
 
+    void AlterProjectionMatrix(const glm::mat4x4& alter);
+
     void StepForward(float step);
     void StepLeft(float step);
 
@@ -64,6 +66,10 @@ public:
 
     struct Frustum
     {
+        AABB CalcAABB()
+        {
+
+        }
         float CalcSolidAngle(const glm::mat4x4& m)
         {
             float tgAlpha = 1.0f / m[1][1];
@@ -129,6 +135,36 @@ public:
     glm::vec3 GetTopVec()
     {
         return m_TopVec;
+    }
+
+    float GetAspect()
+    {
+        return m_Aspect;
+    }
+
+    AABB CalcFrustumAABB()
+    {
+        AABB res;
+
+        float halfHnear = tan(m_Fov / 2) * m_Near;//2 * tan(m_Fov / 2) * m_Near;
+        float halfWnear = halfHnear * m_Aspect;
+
+        glm::vec3 center = m_Position + m_ViewVec * m_Near;
+        res.Extend(center + m_TopVec * halfHnear - m_LeftVec * halfWnear);
+        res.Extend(center + m_TopVec * halfHnear + m_LeftVec * halfWnear);
+        res.Extend(center - m_TopVec * halfHnear - m_LeftVec * halfWnear);
+        res.Extend(center - m_TopVec * halfHnear + m_LeftVec * halfWnear);
+
+        float halfHfar = tan(m_Fov / 2) * m_Far;//2 * tan(m_Fov / 2) * m_Near;
+        float halfWfar = halfHfar * m_Aspect;
+
+        center = m_Position + m_ViewVec * m_Far;
+        res.Extend(center + m_TopVec * halfHfar - m_LeftVec * halfWfar);
+        res.Extend(center + m_TopVec * halfHfar + m_LeftVec * halfWfar);
+        res.Extend(center - m_TopVec * halfHfar - m_LeftVec * halfWfar);
+        res.Extend(center - m_TopVec * halfHfar + m_LeftVec * halfWfar);
+
+        return res;
     }
     //test
     glm::vec3 m_Eye;

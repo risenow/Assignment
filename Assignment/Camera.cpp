@@ -136,6 +136,13 @@ void Camera::UpdateProjection(float aspect)
     UpdateViewProjectionMatrix();
 }
 
+void Camera::AlterProjectionMatrix(const glm::mat4x4& alter)
+{
+    m_ProjectionMatrix = alter * m_ProjectionMatrix;
+
+    UpdateViewProjectionMatrix();
+}
+
 const glm::vec3& Camera::GetRotation() const
 {
     return m_Rotation;

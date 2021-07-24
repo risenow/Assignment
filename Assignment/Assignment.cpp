@@ -116,7 +116,7 @@ int main()
 
     while (!window.IsClosed())
     {
-        shadowMap.Render(device, glm::vec3(0.0f, 2000.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        shadowMap.Render(device, camera, meshInst->GetAABB(), glm::vec3(0.0f, 2000.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 
         device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
         device.GetD3D11DeviceContext()->OMSetDepthStencilState(noDepthStencilState, 0);

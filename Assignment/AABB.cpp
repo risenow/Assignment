@@ -107,6 +107,23 @@ void AABB::Extend(const AABB& v)
     m_Centroid = (m_Min + m_Max) * 0.5f;
 }
 
+void AABB::ShrinkMin(const glm::vec3& v)
+{
+    m_Min = glm::vec3(std::max(m_Min.x, v.x), std::max(m_Min.y, v.y), std::max(m_Min.z, v.z));;
+}
+void AABB::ShrinkMax(const glm::vec3& v)
+{
+    m_Max = glm::vec3(std::min(m_Max.x, v.x), std::min(m_Max.y, v.y), std::min(m_Max.z, v.z));
+}
+
+void AABB::ShrinkBy(const AABB& v)
+{
+    ShrinkMin(v.m_Min);
+    ShrinkMax(v.m_Max);
+
+    m_Centroid = (m_Min + m_Max) * 0.5f;
+}
+
 void AABB::ConvertToCube()
 {
     float maxSide = -FLT_MAX;

@@ -58,5 +58,10 @@ struct AABB
     void Extend(const glm::vec3& v);
     
     void Extend(const AABB& v);
+
+    void ShrinkMin(const glm::vec3& v);
+    void ShrinkMax(const glm::vec3& v);
+    void ShrinkBy(const AABB& v);
+
     void ConvertToCube();
 };

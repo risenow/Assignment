@@ -5,6 +5,7 @@
 #include "GraphicsTextureCollection.h"
 #include "GraphicsSurface.h"
 #include "SuperMeshInstance.h"
+#include "AABB.h"
 //#include <d3d11.h>
 
 class DirectionalShadowMap
@@ -72,10 +73,14 @@ public:
         return m_DepthTarget.GetTexture();
     }
 
-    void Render(GraphicsDevice& device,  const glm::vec3& lightPosition, const glm::vec3& lightDirection)
+    void Render(GraphicsDevice& device, Camera& mainCamera, const AABB& sceneAABB, const glm::vec3& lightPosition, const glm::vec3& lightDirection)
     {
+        glm::mat4x4 cropMatrix = CalcCropMatrix(mainCamera, sceneAABB);
+
         m_Camera.SetPosition(lightPosition);
         m_Camera.SetOrientation(lightDirection);
+
+        m_Camera.AlterProjectionMatrix(cropMatrix);
 
         ClearDepthTarget(device, m_DepthTarget);
 
@@ -94,6 +99,9 @@ public:
             mesh->Render(device, m_Camera, true);
 
         device.GetD3D11DeviceContext()->ClearState();
+
+        float scale = 2.0f;
+        m_Camera.SetProjectionAsOrtho(-1000 * scale, 1000 * scale, -1000 * scale, 1000 * scale, 10.0, 5500.0);
     }
 
     Camera& GetCamera()
@@ -106,6 +114,35 @@ public:
         m_Meshes = insts;
     }
 private:
+    glm::mat4x4 CalcCropMatrix(Camera& mainCamera, const AABB& sceneAABB)
+    {
+        AABB targetVolume = mainCamera.CalcFrustumAABB();
+        targetVolume.ShrinkBy(sceneAABB);
+
+        AABB targetVolumeProjSpace;
+        for (size_t i = 0; i < 8; i++)
+        {
+            glm::vec4 p = m_Camera.GetViewProjectionMatrix() * glm::vec4(targetVolume.GetPoint(i), 1.0f);
+            p = p / p.w;
+
+            targetVolumeProjSpace.Extend(glm::vec3(p.x, p.y, p.z));
+        }
+
+        float sX = 2.0f / (targetVolumeProjSpace.m_Max.x - targetVolumeProjSpace.m_Min.x);
+        float sY = 2.0f / (targetVolumeProjSpace.m_Max.y - targetVolumeProjSpace.m_Min.y);
+
+        float oX = -0.5 * (targetVolumeProjSpace.m_Max.x + targetVolumeProjSpace.m_Min.x) * sX;
+        float oY = -0.5 * (targetVolumeProjSpace.m_Max.y + targetVolumeProjSpace.m_Min.y) * sY;
+
+        glm::mat4x4 cropMatrix;
+        cropMatrix[0] = glm::vec4(sX, 0.0, 0.0, 0.0);
+        cropMatrix[1] = glm::vec4(0.0f, sY, 0.0, 0.0);
+        cropMatrix[2] = glm::vec4(0.0f, 0.0, 1.0, 0.0);
+        cropMatrix[3] = glm::vec4(oX, oY, 0.0, 1.0);
+
+        return cropMatrix;
+    }
+
     ID3D11RasterizerState* m_RastState;
     ID3D11DepthStencilState* m_DepthState;
     ID3D11BlendState* m_BlendState;
