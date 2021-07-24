@@ -80,17 +80,21 @@ void CSEntry(uint GI : SV_GroupIndex, uint3 DTid : SV_DispatchThreadID, uint3 Gi
     float shin = normalShin.w * 128.0f;
     shin = shin == 0.0f ? 70.0f : shin;
 
-    float3 normal = normalShin.xyz * 2.0f - 1.0f;
+    float3 normal = normalize(normalShin.xyz * 2.0f - 1.0f);
 
-    float3 lightVec = normalize(lightDir);
+    float3 lightVec = normalize(lightDir.xyz);
 
-    float3 r = normalize(reflect(normal, lightVec));
+    float3 r = normalize(reflect(lightVec, normal));
 
     const float3 spec = float3(1.0, 1.0f, 1.0f);
     const float ambCoef = 0.35f;
 
+    float3 v = normalize(-vPos.xyz);
+    float specFactor = max(dot(r, v), 0.0f);
+    float specFactorPow = pow(specFactor, shin);
+
     float3 amb = ambCoef * albedo;
-    float lit = pow(max(dot(-r, normalize(-vPos)), 0.0f), shin) * spec + albedo * max(dot(normal, -lightVec), 0.0f);
+    float3 lit = specFactorPow * spec + albedo * max(dot(normal, -lightVec), 0.0f);
 
     OutColor[uTC.xy] = CorrectGamma(float4(shadowFactor * lit + amb, 1.0f));
 }
