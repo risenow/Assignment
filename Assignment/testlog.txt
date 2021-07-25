@@ -1,10 +1,10 @@
-[TIME:315] Adapters enumerated:
-[TIME:315] Adapter index: 0
-[TIME:315] Description: NVIDIA GeForce GTX 1650 Ti
-[TIME:315] 
-[TIME:315] Adapter index: 1
-[TIME:315] Description: Microsoft Basic Render Driver
-[TIME:315] 
+[TIME:312] Adapters enumerated:
+[TIME:312] Adapter index: 0
+[TIME:312] Description: NVIDIA GeForce GTX 1650 Ti
+[TIME:312] 
+[TIME:312] Adapter index: 1
+[TIME:312] Description: Microsoft Basic Render Driver
+[TIME:312] 
 C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
 C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
 C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
@@ -13,3 +13,5 @@ C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shade
 C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
 C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
 C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\basicps.hlsl(15,17): warning X3576: semantics in type overridden by variable/function or enclosing type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\skyboxps.hlsl(47,27-63): warning X3206: 'SunIntensity': implicit truncation of vector type
+C:\Users\Professional\Documents\ZibraAssignment\Assignment\Assignment\Data\shaders\skyboxps.hlsl(36,17): warning X3576: semantics in type overridden by variable/function or enclosing type

@@ -23,6 +23,7 @@
 #include "DemoScene1Generate.h"
 #include "DeferredRenderer.h"
 #include "DirectionalShadowMap.h"
+#include "SkyBox.h"
 #include "randomutils.h"
 #include "basicvsconstants.h"
 
@@ -108,6 +109,7 @@ int main()
 
     DeferredRenderer renderer(device, colorTarget);
     DirectionalShadowMap shadowMap(device);
+    SkyBox sky(device);
 
     SuperMesh* mesh = SuperMesh::FromFile(device, textureCollection, "Data/sponza2/sponza.obj");
     SuperMeshInstance* meshInst = new SuperMeshInstance(mesh, glm::identity<glm::mat4x4>());
@@ -135,7 +137,8 @@ int main()
             renderer.Validate(device, colorTarget);
         }
 
-        shadowMap.Render(device, camera, meshInst->GetAABB(), glm::vec3(0.0f, 2000.0f, 0.0f), lightDir);
+        const glm::vec3 sunPos = glm::vec3(0.0f, 2000.0f, 0.0f);
+        shadowMap.Render(device, camera, meshInst->GetAABB(), sunPos, lightDir);
 
         device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
         device.GetD3D11DeviceContext()->OMSetDepthStencilState(noDepthStencilState, 0);
@@ -145,6 +148,10 @@ int main()
         renderer.Render(device, camera, shadowMap, lightDir);
 
         renderer.FlushTo(device, *colorTarget.GetTexture());
+
+        DepthSurface depthTarget = renderer.GetDepthTarget();
+        BindRenderTargetsDepthTarget(device, { colorTarget }, depthTarget);
+        sky.Render(device, camera, sunPos);
 
         swapchain.Present();
         device.OnPresent();

@@ -112,6 +112,11 @@ public:
     {
         device.GetD3D11DeviceContext()->CopyResource(target.GetD3D11Texture2D(), m_LightBuffer.GetD3D11Texture2D());
     }
+
+    DepthSurface GetDepthTarget()
+    {
+        return m_DepthSurface;
+    }
 private:
     void InitGBuffer(GraphicsDevice& device, ColorSurface backBuffer)
     {

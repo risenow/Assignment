@@ -214,6 +214,8 @@
     <ClInclude Include="Log.h" />
     <ClInclude Include="MaterialData.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="SkyBox.h" />
+    <ClInclude Include="SkyBoxConsts.h" />
     <ClInclude Include="SuperMesh.h" />
     <ClInclude Include="SuperMeshInstance.h" />
   </ItemGroup>
